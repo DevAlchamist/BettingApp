@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import {
   User,
   Mail,
@@ -17,31 +17,54 @@ import {
   Copy,
   Award,
   Clock,
-} from 'lucide-react';
+  Camera,
+} from "lucide-react";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { AlertDialogHeader } from "@/components/ui/alert-dialog";
 
 const recentActivity = [
   {
-    type: 'bet',
-    game: 'Aviator',
+    type: "bet",
+    game: "Aviator",
     amount: 500,
-    result: 'win',
-    date: '2024-03-20 14:30',
+    result: "win",
+    date: "2024-03-20 14:30",
   },
   {
-    type: 'withdrawal',
+    type: "withdrawal",
     amount: 1000,
-    status: 'completed',
-    date: '2024-03-19 16:45',
+    status: "completed",
+    date: "2024-03-19 16:45",
   },
   {
-    type: 'deposit',
+    type: "deposit",
     amount: 2000,
-    status: 'completed',
-    date: '2024-03-18 09:15',
+    status: "completed",
+    date: "2024-03-18 09:15",
   },
 ];
 
 export default function ProfilePage() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState<any>({
+    name: "John Doe",
+    email: "john@example.com",
+    phone: "+1234567890",
+    referral: "JOHN123",
+    avatar: "https://github.com/shadcn.png",
+  });
+  const handleInputChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleImageUpload = (e: any) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setFormData({ ...formData, avatar: url });
+    }
+  };
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -62,11 +85,65 @@ export default function ProfilePage() {
                   <Badge className="bg-green-500">Verified</Badge>
                 </div>
               </div>
-              <Button variant="outline">Edit Profile</Button>
+              <Button variant="outline" onClick={() => setIsOpen(true)}>
+                Edit Profile
+              </Button>
             </div>
           </CardContent>
         </Card>
 
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogContent className="max-w-lg">
+            <AlertDialogHeader>
+              <DialogTitle>Edit Profile</DialogTitle>
+            </AlertDialogHeader>
+
+            {/* Avatar Upload */}
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative">
+                <Avatar className="w-24 h-24">
+                  <AvatarImage src={formData.avatar} />
+                  <AvatarFallback>JD</AvatarFallback>
+                </Avatar>
+                <label
+                  htmlFor="avatar-upload"
+                  className="absolute bottom-0 right-0 bg-gray-900 p-2 rounded-full cursor-pointer"
+                >
+                  <Camera className="text-white w-4 h-4" />
+                </label>
+                <input
+                  type="file"
+                  id="avatar-upload"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </div>
+            </div>
+
+            {/* Input Fields */}
+            <div className="space-y-4">
+              {["name", "email", "phone", "referral"].map((field) => (
+                <div key={field}>
+                  <Label className="capitalize">{field}</Label>
+                  <Input
+                    name={field}
+                    value={formData[field]}
+                    onChange={handleInputChange}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setIsOpen(false)}>
+                Cancel
+              </Button>
+              <Button onClick={() => setIsOpen(false)}>Save Changes</Button>
+            </div>
+          </DialogContent>
+        </Dialog>
         {/* Main Content */}
         <Tabs defaultValue="details" className="space-y-6">
           <TabsList className="grid w-full grid-cols-3">
@@ -164,7 +241,9 @@ export default function ProfilePage() {
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <Shield className="w-5 h-5" />
-                      <span className="font-medium">Two-Factor Authentication</span>
+                      <span className="font-medium">
+                        Two-Factor Authentication
+                      </span>
                     </div>
                     <p className="text-sm text-muted-foreground">
                       Add an extra layer of security to your account
@@ -216,22 +295,24 @@ export default function ProfilePage() {
                     >
                       <div>
                         <p className="font-medium capitalize">
-                          {activity.type === 'bet'
+                          {activity.type === "bet"
                             ? `${activity.game} Game Bet`
-                            : `${activity.type.charAt(0).toUpperCase()}${activity.type.slice(
-                                1
-                              )}`}
+                            : `${activity.type
+                                .charAt(0)
+                                .toUpperCase()}${activity.type.slice(1)}`}
                         </p>
-                        <p className="text-sm text-muted-foreground">{activity.date}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {activity.date}
+                        </p>
                       </div>
                       <div className="text-right">
                         <p className="font-medium">₹{activity.amount}</p>
                         {activity.result && (
                           <p
                             className={`text-sm ${
-                              activity.result === 'win'
-                                ? 'text-green-500'
-                                : 'text-red-500'
+                              activity.result === "win"
+                                ? "text-green-500"
+                                : "text-red-500"
                             }`}
                           >
                             {activity.result.toUpperCase()}

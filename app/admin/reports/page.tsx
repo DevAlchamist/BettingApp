@@ -20,8 +20,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Info, CheckCircle, Eye, Pencil, Send } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { CheckCircle, Pencil, Send } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -31,12 +37,37 @@ interface Report {
   type: string;
   status: "Pending" | "In Progress" | "Resolved";
   date: string;
+  description: string;
 }
 
 const reportsData: Report[] = [
-  { id: "RPT-001", user: "John Doe", type: "Bug", status: "Pending", date: "2024-02-25" },
-  { id: "RPT-002", user: "Jane Smith", type: "Payment Issue", status: "In Progress", date: "2024-02-24" },
-  { id: "RPT-003", user: "Alice Brown", type: "UI Issue", status: "Resolved", date: "2024-02-23" },
+  {
+    id: "RPT-001",
+    user: "John Doe",
+    type: "Bug",
+    status: "Pending",
+    date: "2024-02-25",
+    description:
+      "The submit button does not respond after clicking. Users are unable to complete their actions, causing frustration.",
+  },
+  {
+    id: "RPT-002",
+    user: "Jane Smith",
+    type: "Payment Issue",
+    status: "In Progress",
+    date: "2024-02-24",
+    description:
+      "User attempted to make a payment but was charged twice. Requires investigation and refund process initiation.",
+  },
+  {
+    id: "RPT-003",
+    user: "Alice Brown",
+    type: "UI Issue",
+    status: "Resolved",
+    date: "2024-02-23",
+    description:
+      "The navigation bar does not collapse on mobile screens, making it hard to use the site on smaller devices.",
+  },
 ];
 
 export default function ReportsPage() {
@@ -44,7 +75,9 @@ export default function ReportsPage() {
   const [filterStatus, setFilterStatus] = useState<string>("all");
   const [showSuccess, setShowSuccess] = useState<boolean>(false);
   const [selectedReport, setSelectedReport] = useState<Report | null>(null);
-  const [emailSent, setEmailSent] = useState<boolean>(false);
+  const [emailSentStatus, setEmailSentStatus] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   const handleResolve = (id: string) => {
     setReports((prevReports) =>
@@ -60,28 +93,26 @@ export default function ReportsPage() {
     setSelectedReport(report);
   };
 
-  const handleSaveChanges = () => {
-    if (!selectedReport) return;
-    setReports((prevReports) =>
-      prevReports.map((report) => (report.id === selectedReport.id ? selectedReport : report))
-    );
-    setSelectedReport(null);
-  };
-
-  const handleSendEmail = () => {
-    setEmailSent(true);
-    setTimeout(() => setEmailSent(false), 3000);
+  const handleSendEmail = (id: string) => {
+    setEmailSentStatus((prev) => ({ ...prev, [id]: true }));
+    setTimeout(() => {
+      setEmailSentStatus((prev) => ({ ...prev, [id]: false }));
+    }, 3000);
   };
 
   const filteredReports =
-    filterStatus === "all" ? reports : reports.filter((report) => report.status === filterStatus);
+    filterStatus === "all"
+      ? reports
+      : reports.filter((report) => report.status === filterStatus);
 
   return (
     <div className="p-6 w-full mx-auto space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-bold">📊 User Reports</CardTitle>
-          <p className="text-gray-500 text-sm">Manage and resolve user reports.</p>
+          <p className="text-gray-500 text-sm">
+            Manage and resolve user reports.
+          </p>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center gap-4">
@@ -117,18 +148,35 @@ export default function ReportsPage() {
                   <TableCell>{report.user}</TableCell>
                   <TableCell>{report.type}</TableCell>
                   <TableCell>
-                    <Badge variant={report.status === "Resolved" ? "secondary" : "default"}>
+                    <Badge
+                      variant={
+                        report.status === "Resolved" ? "secondary" : "default"
+                      }
+                    >
                       {report.status}
                     </Badge>
                   </TableCell>
                   <TableCell>{report.date}</TableCell>
                   <TableCell className="flex gap-2">
-                    <Button size="sm" variant="outline" onClick={() => handleEditClick(report)}>
-                      <Pencil className="w-4 h-4 mr-1" /> Edit
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => handleEditClick(report)}
+                    >
+                      <Pencil className="w-4 h-4 mr-1" /> View
                     </Button>
-                    <Button size="sm" variant="default" onClick={handleSendEmail}>
-                      {emailSent ? <CheckCircle className="w-4 h-4 mr-1" /> : <Send className="w-4 h-4 mr-1" />} 
-                      {emailSent ? "Sent ✅" : "Send Email"}
+                    <Button
+                      size="sm"
+                      variant={
+                        emailSentStatus[report.id] ? "secondary" : "default"
+                      }
+                      onClick={() => handleSendEmail(report.id)}
+                      disabled={emailSentStatus[report.id]}
+                    >
+                      <Send className="w-4 h-4 mr-1" />
+                      {emailSentStatus[report.id]
+                        ? "Email Sent ✅"
+                        : "Send Email"}
                     </Button>
                   </TableCell>
                 </TableRow>
@@ -141,7 +189,9 @@ export default function ReportsPage() {
       {showSuccess && (
         <Alert variant="default">
           <AlertTitle>✅ Report Resolved!</AlertTitle>
-          <AlertDescription>The issue has been marked as resolved.</AlertDescription>
+          <AlertDescription>
+            The issue has been marked as resolved.
+          </AlertDescription>
         </Alert>
       )}
 
@@ -149,14 +199,20 @@ export default function ReportsPage() {
         <Dialog open={true} onOpenChange={() => setSelectedReport(null)}>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Edit Report</DialogTitle>
+              <DialogTitle>Report Details</DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
-              <Input value={selectedReport.user} onChange={(e) => setSelectedReport({ ...selectedReport, user: e.target.value })} />
-              <Textarea value={selectedReport.type} onChange={(e) => setSelectedReport({ ...selectedReport, type: e.target.value })} />
+              <Input value={selectedReport.user} disabled className="" />
+              <Input value={selectedReport.type} disabled className="" />
+              <div className="border p-3 rounded-md ">
+                <p className="text-sm text-gray-600 font-semibold">
+                  Issue Description:
+                </p>
+                <p className="text-gray-800">{selectedReport.description}</p>
+              </div>
             </div>
             <DialogFooter>
-              <Button onClick={handleSaveChanges}>Save Changes</Button>
+              <Button onClick={() => setSelectedReport(null)}>Close</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
