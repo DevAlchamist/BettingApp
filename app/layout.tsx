@@ -23,7 +23,9 @@ export default function RootLayout({
               <Navbar />
             </div>
             <main className="flex-1">{children}</main>
-            <Footer />
+            <div className="w-full">
+              <Footer />
+            </div>
           </div>
           <Toaster />
         </ThemeProvider>

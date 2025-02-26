@@ -11,6 +11,7 @@ import {
   Gift,
   HelpCircle,
   Shield,
+  MailWarning,
 } from "lucide-react";
 
 const navigation = [
@@ -20,6 +21,7 @@ const navigation = [
   { name: "Referral", href: "/referral", icon: Gift },
   { name: "Support", href: "/support", icon: HelpCircle },
   { name: "Fair Play", href: "/fair-play", icon: Shield },
+  { name: "Reports", href: "/reports", icon: MailWarning },
 ];
 
 export function Navbar() {
