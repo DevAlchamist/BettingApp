@@ -25,6 +25,28 @@
     --ring: 187 100% 47%;
     --radius: 1rem;
   }
+  .dark {
+    --background: 0 0% 98%;
+    --foreground: 240 86% 6%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 86% 6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 86% 6%;
+    --primary: 326 83% 50%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 47 95% 50%;
+    --secondary-foreground: 240 86% 6%;
+    --accent: 187 78% 40%;
+    --accent-foreground: 240 86% 6%;
+    --muted: 240 5% 90%;
+    --muted-foreground: 240 5% 40%;
+    --destructive: 0 72% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 240 5% 85%;
+    --input: 240 5% 85%;
+    --ring: 187 100% 47%;
+    --radius: 1rem;
+  }
 }
 
 @layer base {
@@ -34,14 +56,19 @@
   body {
     @apply bg-background text-foreground antialiased;
   }
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-bold tracking-tight;
   }
 }
 
 @layer components {
   .hover-card {
-    @apply transition-all duration-300 hover:scale-[1.02] ;
+    @apply transition-all duration-300 hover:scale-[1.02];
   }
 
   .button-effect {
@@ -112,8 +139,13 @@
 
 /* Animations */
 @keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .animate-float {
@@ -121,8 +153,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
 }
 
 .animate-pulse-soft {

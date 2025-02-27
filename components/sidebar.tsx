@@ -52,7 +52,7 @@ export default function Sidebar() {
         initial={{ x: -200, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
         transition={{ duration: 0.4 }}
-        className="hidden md:flex flex-col h-full w-64 bg-card border-r border-border text-card-foreground p-6 justify-between"
+        className="hidden md:flex flex-col h-full w-full border-r border-border text-card-foreground p-6 justify-between"
       >
         {/* Navigation Links */}
         <nav className="space-y-4">
