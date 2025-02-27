@@ -116,41 +116,37 @@ export default function GamesPage() {
 
           {/* 🎲 Game Cards */}
           <motion.div
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 gap-6 w-full"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
           >
             {games.map((game) => (
               <Link key={game.id} href={`/game/${game.id}`}>
-                <Card className="hover:bg-accent/50 transition-all cursor-pointer flex flex-col md:flex-row items-center gap-4 p-4 md:p-6">
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-lg bg-primary/10 flex items-center justify-center">
-                    <game.icon className="w-10 h-10 text-primary" />
+                <Card className="hover:bg-accent/50 transition-all cursor-pointer flex flex-col w-full lg:max-w-full md:flex-row items-center gap-6 p-4 md:p-6 md:max-w-3xl md:mx-auto">
+                  <div className="w-20 h-20 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <game.icon className="w-12 h-12 text-primary" />
                   </div>
                   <div className="flex-1 text-center md:text-left">
                     <CardHeader className="p-0">
                       <CardTitle className="text-xl">{game.name}</CardTitle>
                       <CardDescription>{game.description}</CardDescription>
                     </CardHeader>
-                    <CardContent className="p-0 mt-3">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm text-muted-foreground">
-                            Live Players
-                          </p>
-                          <p className="font-medium">{game.players}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">
-                            Max Win
-                          </p>
-                          <p className="font-medium">{game.maxWin}</p>
-                        </div>
+                    <CardContent className="p-0 mt-3 grid grid-cols-2 gap-4">
+                      <div>
+                        <p className="text-sm text-muted-foreground">
+                          Live Players
+                        </p>
+                        <p className="font-medium">{game.players}</p>
                       </div>
-                      <p className="text-sm text-muted-foreground mt-2">
-                        <strong>Strategy:</strong> {game.strategy}
-                      </p>
+                      <div>
+                        <p className="text-sm text-muted-foreground">Max Win</p>
+                        <p className="font-medium">{game.maxWin}</p>
+                      </div>
                     </CardContent>
+                    <p className="text-sm text-muted-foreground mt-2">
+                      <strong>Strategy:</strong> {game.strategy}
+                    </p>
                   </div>
                   <Button className="w-full md:w-auto">Play Now</Button>
                 </Card>

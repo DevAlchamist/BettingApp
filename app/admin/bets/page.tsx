@@ -1,12 +1,13 @@
 'use client';
 
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Edit, Trash, X } from 'lucide-react';
+import { Edit, X } from 'lucide-react';
 
 const demoBets = [
   { id: 1, user: 'John Doe', amount: 100, odds: '2.5', status: 'Won', betTime: '2024-02-20 14:30' },
@@ -35,13 +36,13 @@ export default function BetsPage() {
   };
 
   return (
-    <div className="p-6">
-      <Card>
+    <motion.div className="p-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
+      <Card className="max-w-full overflow-x-auto">
         <CardHeader>
           <CardTitle>Bets</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
+          <Table className="min-w-full">
             <TableHeader>
               <TableRow>
                 <TableHead>User</TableHead>
@@ -53,7 +54,7 @@ export default function BetsPage() {
             </TableHeader>
             <TableBody>
               {bets.map((bet) => (
-                <TableRow key={bet.id}>
+                <motion.tr key={bet.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
                   <TableCell>{bet.user}</TableCell>
                   <TableCell>${bet.amount}</TableCell>
                   <TableCell>{bet.odds}</TableCell>
@@ -63,21 +64,20 @@ export default function BetsPage() {
                       <Edit className="w-4 h-4" />
                     </Button>
                   </TableCell>
-                </TableRow>
+                </motion.tr>
               ))}
             </TableBody>
           </Table>
         </CardContent>
       </Card>
 
-      {/* Edit Bet Modal */}
       {selectedBet && (
         <Dialog open={!!selectedBet} onOpenChange={() => setSelectedBet(null)}>
           <DialogContent className="p-6">
             <DialogHeader>
               <DialogTitle>Edit Bet</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
+            <motion.div className="space-y-4" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }}>
               <Input
                 value={selectedBet.user}
                 onChange={(e) => handleEdit(selectedBet.id, 'user', e.target.value)}
@@ -97,7 +97,7 @@ export default function BetsPage() {
               />
               <p><strong>Odds:</strong> {selectedBet.odds} (Uneditable)</p>
               <p><strong>Status:</strong> {selectedBet.status} (Uneditable)</p>
-            </div>
+            </motion.div>
             <DialogFooter className="flex justify-end">
               <Button variant="outline" onClick={() => setSelectedBet(null)}>
                 <X className="w-4 h-4 mr-2" /> Close
@@ -106,6 +106,6 @@ export default function BetsPage() {
           </DialogContent>
         </Dialog>
       )}
-    </div>
+    </motion.div>
   );
 }

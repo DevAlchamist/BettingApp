@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 import {
   User,
   Mail,
@@ -67,16 +68,31 @@ export default function ProfilePage() {
   };
   return (
     <div className="min-h-screen bg-background p-6">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-4xl mx-auto space-y-8"
+      >
         {/* Profile Header */}
         <Card>
           <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row items-center gap-6">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col md:flex-row items-center gap-6"
+            >
               <Avatar className="w-24 h-24">
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>JD</AvatarFallback>
               </Avatar>
-              <div className="flex-1 text-center md:text-left">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="flex-1 text-center md:text-left"
+              >
                 <h1 className="text-2xl font-bold">John Doe</h1>
                 <p className="text-muted-foreground">Member since March 2024</p>
                 <div className="flex flex-wrap gap-2 mt-2 justify-center md:justify-start">
@@ -84,11 +100,11 @@ export default function ProfilePage() {
                   <Badge variant="secondary">VIP Member</Badge>
                   <Badge className="bg-green-500">Verified</Badge>
                 </div>
-              </div>
+              </motion.div>
               <Button variant="outline" onClick={() => setIsOpen(true)}>
                 Edit Profile
               </Button>
-            </div>
+            </motion.div>
           </CardContent>
         </Card>
 
@@ -99,7 +115,12 @@ export default function ProfilePage() {
             </AlertDialogHeader>
 
             {/* Avatar Upload */}
-            <div className="flex flex-col items-center gap-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center gap-4"
+            >
               <div className="relative">
                 <Avatar className="w-24 h-24">
                   <AvatarImage src={formData.avatar} />
@@ -119,10 +140,15 @@ export default function ProfilePage() {
                   onChange={handleImageUpload}
                 />
               </div>
-            </div>
+            </motion.div>
 
             {/* Input Fields */}
-            <div className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-4"
+            >
               {["name", "email", "phone", "referral"].map((field) => (
                 <div key={field}>
                   <Label className="capitalize">{field}</Label>
@@ -133,15 +159,20 @@ export default function ProfilePage() {
                   />
                 </div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Action Buttons */}
-            <div className="flex justify-end gap-2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="flex justify-end gap-2"
+            >
               <Button variant="outline" onClick={() => setIsOpen(false)}>
                 Cancel
               </Button>
               <Button onClick={() => setIsOpen(false)}>Save Changes</Button>
-            </div>
+            </motion.div>
           </DialogContent>
         </Dialog>
         {/* Main Content */}
@@ -158,7 +189,12 @@ export default function ProfilePage() {
                 <CardTitle>Personal Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                >
                   <div className="space-y-2">
                     <Label>Full Name</Label>
                     <div className="flex">
@@ -195,7 +231,7 @@ export default function ProfilePage() {
                       </Button>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               </CardContent>
             </Card>
 
@@ -204,7 +240,12 @@ export default function ProfilePage() {
                 <CardTitle>Statistics</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="grid grid-cols-1 md:grid-cols-3 gap-4"
+                >
                   <div className="p-4 rounded-lg bg-accent/50 space-y-2">
                     <div className="flex items-center gap-2">
                       <Award className="w-5 h-5 text-primary" />
@@ -226,7 +267,7 @@ export default function ProfilePage() {
                     </div>
                     <p className="text-2xl font-bold">64%</p>
                   </div>
-                </div>
+                </motion.div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -237,7 +278,12 @@ export default function ProfilePage() {
                 <CardTitle>Security Settings</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="flex items-center justify-between">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex items-center justify-between"
+                >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <Shield className="w-5 h-5" />
@@ -250,9 +296,14 @@ export default function ProfilePage() {
                     </p>
                   </div>
                   <Button variant="outline">Enable</Button>
-                </div>
+                </motion.div>
 
-                <div className="flex items-center justify-between">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex items-center justify-between"
+                >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <Key className="w-5 h-5" />
@@ -263,9 +314,14 @@ export default function ProfilePage() {
                     </p>
                   </div>
                   <Button variant="outline">Update</Button>
-                </div>
+                </motion.div>
 
-                <div className="flex items-center justify-between">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex items-center justify-between"
+                >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
                       <LogOut className="w-5 h-5" />
@@ -276,7 +332,7 @@ export default function ProfilePage() {
                     </p>
                   </div>
                   <Button variant="outline">View All</Button>
-                </div>
+                </motion.div>
               </CardContent>
             </Card>
           </TabsContent>
@@ -287,7 +343,12 @@ export default function ProfilePage() {
                 <CardTitle>Recent Activity</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className="space-y-4"
+                >
                   {recentActivity.map((activity, index) => (
                     <div
                       key={index}
@@ -326,12 +387,12 @@ export default function ProfilePage() {
                       </div>
                     </div>
                   ))}
-                </div>
+                </motion.div>
               </CardContent>
             </Card>
           </TabsContent>
         </Tabs>
-      </div>
+      </motion.div>
     </div>
   );
 }

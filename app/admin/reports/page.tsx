@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -29,7 +30,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 
 interface Report {
   id: string;
@@ -79,16 +79,6 @@ export default function ReportsPage() {
     [key: string]: boolean;
   }>({});
 
-  const handleResolve = (id: string) => {
-    setReports((prevReports) =>
-      prevReports.map((report) =>
-        report.id === id ? { ...report, status: "Resolved" } : report
-      )
-    );
-    setShowSuccess(true);
-    setTimeout(() => setShowSuccess(false), 3000);
-  };
-
   const handleEditClick = (report: Report) => {
     setSelectedReport(report);
   };
@@ -106,7 +96,12 @@ export default function ReportsPage() {
       : reports.filter((report) => report.status === filterStatus);
 
   return (
-    <div className="p-6 w-full mx-auto space-y-6">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="p-6 w-full mx-auto space-y-6"
+    >
       <Card>
         <CardHeader>
           <CardTitle className="text-xl font-bold">📊 User Reports</CardTitle>
@@ -115,7 +110,7 @@ export default function ReportsPage() {
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4">
             <label className="text-gray-600 text-sm">Filter by Status:</label>
             <Select value={filterStatus} onValueChange={setFilterStatus}>
               <SelectTrigger className="w-40">
@@ -130,70 +125,63 @@ export default function ReportsPage() {
             </Select>
           </div>
 
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>ID</TableHead>
-                <TableHead>User</TableHead>
-                <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredReports.map((report) => (
-                <TableRow key={report.id}>
-                  <TableCell>{report.id}</TableCell>
-                  <TableCell>{report.user}</TableCell>
-                  <TableCell>{report.type}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        report.status === "Resolved" ? "secondary" : "default"
-                      }
-                    >
-                      {report.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{report.date}</TableCell>
-                  <TableCell className="flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => handleEditClick(report)}
-                    >
-                      <Pencil className="w-4 h-4 mr-1" /> View
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={
-                        emailSentStatus[report.id] ? "secondary" : "default"
-                      }
-                      onClick={() => handleSendEmail(report.id)}
-                      disabled={emailSentStatus[report.id]}
-                    >
-                      <Send className="w-4 h-4 mr-1" />
-                      {emailSentStatus[report.id]
-                        ? "Email Sent ✅"
-                        : "Send Email"}
-                    </Button>
-                  </TableCell>
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>User</TableHead>
+                  <TableHead>Type</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredReports.map((report) => (
+                  <TableRow key={report.id}>
+                    <TableCell>{report.id}</TableCell>
+                    <TableCell>{report.user}</TableCell>
+                    <TableCell>{report.type}</TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={
+                          report.status === "Resolved" ? "secondary" : "default"
+                        }
+                      >
+                        {report.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{report.date}</TableCell>
+                    <TableCell className="flex flex-col sm:flex-row gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleEditClick(report)}
+                      >
+                        <Pencil className="w-4 h-4 mr-1" /> View
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant={
+                          emailSentStatus[report.id] ? "secondary" : "default"
+                        }
+                        onClick={() => handleSendEmail(report.id)}
+                        disabled={emailSentStatus[report.id]}
+                      >
+                        <Send className="w-4 h-4 mr-1" />
+                        {emailSentStatus[report.id]
+                          ? "Email Sent ✅"
+                          : "Send Email"}
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </CardContent>
       </Card>
-
-      {showSuccess && (
-        <Alert variant="default">
-          <AlertTitle>✅ Report Resolved!</AlertTitle>
-          <AlertDescription>
-            The issue has been marked as resolved.
-          </AlertDescription>
-        </Alert>
-      )}
 
       {selectedReport && (
         <Dialog open={true} onOpenChange={() => setSelectedReport(null)}>
@@ -201,22 +189,24 @@ export default function ReportsPage() {
             <DialogHeader>
               <DialogTitle>Report Details</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-              <Input value={selectedReport.user} disabled className="" />
-              <Input value={selectedReport.type} disabled className="" />
-              <div className="border p-3 rounded-md ">
-                <p className="text-sm text-gray-600 font-semibold">
-                  Issue Description:
-                </p>
-                <p className="text-gray-800">{selectedReport.description}</p>
-              </div>
-            </div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              className="space-y-4"
+            >
+              <Input value={selectedReport.user} disabled />
+              <Input value={selectedReport.type} disabled />
+              <p className="text-gray-800 border p-3 rounded-md">
+                {selectedReport.description}
+              </p>
+            </motion.div>
             <DialogFooter>
               <Button onClick={() => setSelectedReport(null)}>Close</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       )}
-    </div>
+    </motion.div>
   );
 }

@@ -17,6 +17,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import ThemeSwitcher from "./themeSwitcher";
 
 const navigation = [
   { name: "Games", href: "/games", icon: Gamepad2 },
@@ -33,12 +34,16 @@ export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
+    <>
+      <div className="fixed bottom-2 right-2">
+        <ThemeSwitcher />
+      </div>
     <header className="sticky top-0 z-50 w-full flex justify-center  border-b shadow-md">
       <nav className="container flex h-16 items-center justify-between px-4 md:px-6">
         {/* Logo */}
         <Link href="/" className="flex items-center space-x-2 text-primary">
           <CircleDollarSign className="h-8 w-8 text-primary" />
-          <span className="text-xl font-bold">BetMaster</span>
+          <span className="text-xl font-bold">NexusBet</span>
         </Link>
 
         {/* Desktop Navigation */}
@@ -86,19 +91,21 @@ export function Navbar() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.3 }}
             className="md:hidden absolute top-16 left-0 w-full bg-background shadow-lg border-t"
-          >
+            >
             <div className="flex flex-col space-y-3 p-4">
               {navigation.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   className={`flex items-center space-x-2 text-sm font-medium py-2 hover:text-blue-500 ${
-                    pathname === item.href ? "text-blue-600 font-semibold" : "text-gray-600"
+                    pathname === item.href
+                    ? "text-blue-600 font-semibold"
+                    : "text-gray-600"
                   }`}
                   onClick={() => setIsOpen(false)}
                 >
@@ -110,7 +117,10 @@ export function Navbar() {
               {/* Mobile Auth Buttons */}
               <div className="flex flex-col space-y-3 pt-4">
                 <Link href="/login">
-                  <Button variant="outline" className="w-full text-blue-600 border-blue-600">
+                  <Button
+                    variant="outline"
+                    className="w-full text-blue-600 border-blue-600"
+                  >
                     Login
                   </Button>
                 </Link>
@@ -125,5 +135,6 @@ export function Navbar() {
         )}
       </AnimatePresence>
     </header>
+              </>
   );
 }

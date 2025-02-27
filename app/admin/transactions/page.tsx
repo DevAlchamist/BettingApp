@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion"; // Framer Motion Import
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
@@ -78,7 +79,7 @@ const transactions: Transaction[] = [
   },
 ];
 
-// Map status to valid badge variants
+// Map status to badge variants
 const getBadgeVariant = (status: string) => {
   switch (status) {
     case "Completed":
@@ -112,13 +113,18 @@ export default function TransactionsPage() {
   };
 
   return (
-    <div className="p-6">
-      <Card>
+    <motion.div
+      className="p-6 w-full mx-auto"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
+      <Card className="overflow-x-auto">
         <CardHeader>
           <CardTitle>Transactions</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
+          <Table className="w-full">
             <TableHeader>
               <TableRow>
                 <TableHead>ID</TableHead>
@@ -149,7 +155,7 @@ export default function TransactionsPage() {
                         value={txnStatuses[txn.id]}
                       >
                         <SelectTrigger className="w-[120px]">
-                          <SelectValue />
+                          <SelectValue placeholder="Select Status" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Completed">Completed</SelectItem>
@@ -186,7 +192,12 @@ export default function TransactionsPage() {
             <DialogTitle>Transaction Details</DialogTitle>
           </DialogHeader>
           {selectedTxn && (
-            <div className="space-y-2 p-4">
+            <motion.div
+              className="space-y-2 p-4"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.2 }}
+            >
               <p>
                 <strong>ID:</strong> {selectedTxn.id}
               </p>
@@ -208,10 +219,10 @@ export default function TransactionsPage() {
               <p>
                 <strong>Date:</strong> {selectedTxn.date}
               </p>
-            </div>
+            </motion.div>
           )}
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }

@@ -1,12 +1,19 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 
@@ -30,12 +37,20 @@ export default function ReportIssuesPage() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-6">
-      <Card>
+    <motion.div
+      className="p-6 max-w-3xl mx-auto space-y-6"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Card className="w-full max-w-lg mx-auto p-4">
         <CardHeader>
-          <CardTitle className="text-xl font-bold">🛠️ Report an Issue</CardTitle>
+          <CardTitle className="text-xl font-bold">
+            🛠️ Report an Issue
+          </CardTitle>
           <p className="text-gray-500 text-sm">
-            Facing any issues? Let us know and we'll get it fixed as soon as possible.
+            Facing any issues? Let us know and we'll get it fixed as soon as
+            possible.
           </p>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -45,7 +60,9 @@ export default function ReportIssuesPage() {
               Issue Type
               <Info className="w-4 h-4 text-gray-500" />
             </Label>
-            <p className="text-xs text-gray-500">Select the category that best describes your issue.</p>
+            <p className="text-xs text-gray-500">
+              Select the category that best describes your issue.
+            </p>
             <Select value={issueType} onValueChange={setIssueType}>
               <SelectTrigger>
                 <SelectValue placeholder="Select issue type" />
@@ -63,14 +80,24 @@ export default function ReportIssuesPage() {
           {/* Issue Title */}
           <div>
             <Label htmlFor="title">Title</Label>
-            <p className="text-xs text-gray-500">Provide a short and clear title for your issue.</p>
-            <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Example: Payment not processing" />
+            <p className="text-xs text-gray-500">
+              Provide a short and clear title for your issue.
+            </p>
+            <Input
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Example: Payment not processing"
+            />
           </div>
 
           {/* Issue Description */}
           <div>
             <Label htmlFor="description">Description</Label>
-            <p className="text-xs text-gray-500">Describe the issue in detail. Include steps to reproduce if possible.</p>
+            <p className="text-xs text-gray-500">
+              Describe the issue in detail. Include steps to reproduce if
+              possible.
+            </p>
             <Textarea
               id="description"
               value={description}
@@ -80,19 +107,33 @@ export default function ReportIssuesPage() {
           </div>
 
           {/* Submit Button */}
-          <Button onClick={handleSubmit} disabled={!title || !description}>
-            🚀 Submit Report
-          </Button>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              onClick={handleSubmit}
+              disabled={!title || !description}
+              className="w-full"
+            >
+              🚀 Submit Report
+            </Button>
+          </motion.div>
         </CardContent>
       </Card>
 
       {/* Success Message */}
       {submitted && (
-        <Alert variant="default">
-          <AlertTitle>✅ Issue Submitted!</AlertTitle>
-          <AlertDescription>Thank you for reporting! Our team will review and take action.</AlertDescription>
-        </Alert>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.3 }}
+        >
+          <Alert variant="default" className="max-w-lg mx-auto">
+            <AlertTitle>✅ Issue Submitted!</AlertTitle>
+            <AlertDescription>
+              Thank you for reporting! Our team will review and take action.
+            </AlertDescription>
+          </Alert>
+        </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 }

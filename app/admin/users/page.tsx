@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -110,13 +111,17 @@ export default function UsersPage() {
   };
 
   return (
-    <div className="p-6">
+    <motion.div
+      className="p-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+    >
       <Card>
         <CardHeader>
           <CardTitle>Users</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex justify-between mb-4">
+          <div className="flex flex-col md:flex-row justify-between mb-4 gap-4">
             <Input
               placeholder="Search users..."
               value={search}
@@ -142,58 +147,67 @@ export default function UsersPage() {
               <Plus className="w-4 h-4" /> Add User
             </Button>
           </div>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Email</TableHead>
-                <TableHead>Role</TableHead>
-                <TableHead>Total Bets</TableHead>
-                <TableHead>Login at</TableHead>
-                <TableHead>Total Hours</TableHead>
-                <TableHead>Reports</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredUsers.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell>{user.name}</TableCell>
-                  <TableCell>{user.email}</TableCell>
-                  <TableCell>{user.role}</TableCell>
-                  <TableCell>{user.totalBets}</TableCell>
-                  <TableCell>{user.createdAt}</TableCell>
-                  <TableCell>{user.playtime}</TableCell>
-                  <TableCell>{user.reports}</TableCell>
-                  <TableCell>
-                    <div className="flex gap-2">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => {
-                          setSelectedUser(user);
-                          setIsAdding(false);
-                        }}
-                      >
-                        <Edit className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() =>
-                          setUsers((prev) =>
-                            prev.filter((u) => u.id !== user.id)
-                          )
-                        }
-                      >
-                        <Trash className="w-4 h-4 text-red-500" />
-                      </Button>
-                    </div>
-                  </TableCell>
+          <motion.div
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+          >
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead>Total Bets</TableHead>
+                  <TableHead>Login at</TableHead>
+                  <TableHead>Total Hours</TableHead>
+                  <TableHead>Reports</TableHead>
+                  <TableHead>Actions</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {filteredUsers.map((user) => (
+                  <motion.tr
+                    key={user.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                  >
+                    <TableCell>{user.name}</TableCell>
+                    <TableCell>{user.email}</TableCell>
+                    <TableCell>{user.role}</TableCell>
+                    <TableCell>{user.totalBets}</TableCell>
+                    <TableCell>{user.createdAt}</TableCell>
+                    <TableCell>{user.playtime}</TableCell>
+                    <TableCell>{user.reports}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            setSelectedUser(user);
+                            setIsAdding(false);
+                          }}
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() =>
+                            setUsers((prev) =>
+                              prev.filter((u) => u.id !== user.id)
+                            )
+                          }
+                        >
+                          <Trash className="w-4 h-4 text-red-500" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </motion.tr>
+                ))}
+              </TableBody>
+            </Table>
+          </motion.div>
         </CardContent>
       </Card>
 
@@ -210,7 +224,12 @@ export default function UsersPage() {
             <DialogTitle>{isAdding ? "Add New User" : "Edit User"}</DialogTitle>
           </DialogHeader>
           {selectedUser && (
-            <div className="space-y-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-4"
+            >
               <Input
                 placeholder="Name"
                 value={selectedUser.name}
@@ -276,7 +295,7 @@ export default function UsersPage() {
                   )
                 }
               />
-            </div>
+            </motion.div>
           )}
           <DialogFooter className="flex justify-end gap-2">
             <Button
@@ -294,6 +313,6 @@ export default function UsersPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
+    </motion.div>
   );
 }

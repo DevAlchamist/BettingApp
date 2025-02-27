@@ -12,6 +12,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { Users, DollarSign, ChartLine, CheckCircle } from "lucide-react";
+import { motion } from "framer-motion";
 
 const userGrowthData = [
   { month: "Jan", users: 200 },
@@ -33,85 +34,91 @@ const bettingTrendsData = [
 
 const Dashboard = () => {
   return (
-    <div className="p-6 space-y-6">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="p-6 space-y-6"
+    >
       <h1 className="section-title">Admin Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <Card className="stat-card">
-          <CardContent className="flex items-center gap-4">
-            <Users className="h-8 w-8" />
-            <div>
-              <p className="text-muted-foreground text-sm">Total Users</p>
-              <h3 className="text-2xl font-bold">1,245</h3>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="stat-card">
-          <CardContent className="flex items-center gap-4">
-            <ChartLine className="h-8 w-8" />
-            <div>
-              <p className="text-muted-foreground text-sm">Total Bets</p>
-              <h3 className="text-2xl font-bold">8,420</h3>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="stat-card">
-          <CardContent className="flex items-center gap-4">
-            <DollarSign className="h-8 w-8" />
-            <div>
-              <p className="text-muted-foreground text-sm">Total Revenue</p>
-              <h3 className="text-2xl font-bold">$25,340</h3>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="stat-card">
-          <CardContent className="flex items-center gap-4">
-            <CheckCircle className="h-8 w-8" />
-            <div>
-              <p className="text-muted-foreground text-sm">
-                Successful Transactions
-              </p>
-              <h3 className="text-2xl font-bold">6,789</h3>
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {[
+          { name: "Total Users", value: "1,245", icon: Users },
+          { name: "Total Bets", value: "8,420", icon: ChartLine },
+          { name: "Total Revenue", value: "$25,340", icon: DollarSign },
+          {
+            name: "Successful Transactions",
+            value: "6,789",
+            icon: CheckCircle,
+          },
+        ].map(({ name, value, icon: Icon }, index) => (
+          <motion.div
+            key={name}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1, duration: 0.5 }}
+          >
+            <Card className="stat-card">
+              <CardContent className="flex items-center gap-4">
+                <Icon className="h-8 w-8" />
+                <div>
+                  <p className="text-muted-foreground text-sm">{name}</p>
+                  <h3 className="text-2xl font-bold">{value}</h3>
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="game-card">
-          <CardContent>
-            <h2 className="text-xl font-bold mb-4">User Engagements</h2>
-            <ResponsiveContainer width="100%" height={250}>
-              <LineChart data={userGrowthData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="users" stroke="#4F46E5" />
-              </LineChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-
-        <Card className="game-card">
-          <CardContent>
-            <h2 className="text-xl font-bold mb-4">Betting Trends</h2>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={bettingTrendsData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="bets" fill="#10B981" />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
+        {[
+          {
+            title: "User Engagements",
+            data: userGrowthData,
+            component: LineChart,
+            key: "users",
+            color: "#4F46E5",
+          },
+          {
+            title: "Betting Trends",
+            data: bettingTrendsData,
+            component: BarChart,
+            key: "bets",
+            color: "#10B981",
+          },
+        ].map(
+          ({ title, data, component: ChartComponent, key, color }, index) => (
+            <motion.div
+              key={title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.2, duration: 0.5 }}
+            >
+              <Card className="game-card">
+                <CardContent>
+                  <h2 className="text-xl font-bold mb-4">{title}</h2>
+                  <ResponsiveContainer width="100%" height={250}>
+                    <ChartComponent data={data}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      {key === "users" ? (
+                        <Line type="monotone" dataKey={key} stroke={color} />
+                      ) : (
+                        <Bar dataKey={key} fill={color} />
+                      )}
+                    </ChartComponent>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+            </motion.div>
+          )
+        )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
